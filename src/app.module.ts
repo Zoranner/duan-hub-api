@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module';
+import { NodesModule } from './nodes/nodes.module';
 import { PlayersModule } from './players/players.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { PlayersModule } from './players/players.module';
     AuthModule,
     UsersModule,
     ProjectsModule,
+    NodesModule,
     PlayersModule,
   ],
   controllers: [AppController],
