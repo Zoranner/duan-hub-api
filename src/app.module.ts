@@ -1,10 +1,33 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.local.env'],
+    }),
+    TypeOrmModule.forRoot(),
+    ScheduleModule.forRoot(),
+    AuthModule,
+    UsersModule,
+  ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: SuccessInterceptor,
+    // },
+  ],
 })
 export class AppModule {}
