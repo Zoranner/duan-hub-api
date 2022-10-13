@@ -3,15 +3,17 @@ import 'src/utils/math.extension';
 
 @Injectable()
 export class ValidatePagePipe implements PipeTransform {
-  transform(value: any, _metadata: ArgumentMetadata) {
-    return Math.max(1, value ?? 1);
+  transform(value: number, _metadata: ArgumentMetadata) {
+    value = Number.isInteger(value) ? value : 1;
+    return Math.max(1, value);
   }
 }
 
 @Injectable()
 export class ValidateLimitPipe implements PipeTransform {
-  transform(value: any, _metadata: ArgumentMetadata) {
-    return Math.clamp(value ?? 10, 10, 50);
+  transform(value: number, _metadata: ArgumentMetadata) {
+    value = Number.isInteger(value) ? value : 10;
+    return Math.clamp(value, 10, 50);
   }
 }
 
