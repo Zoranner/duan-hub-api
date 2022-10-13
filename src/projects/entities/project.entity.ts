@@ -1,29 +1,29 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-interface Condition {
+interface GoalCondition {
   target: string;
   action: number;
   timeLimit: number;
 }
 
-interface Goal {
+interface CampGoal {
   type: number;
-  condition: Condition;
+  condition: GoalCondition;
 }
 
-interface Option {
+interface NodeOption {
   name: string;
   current: any;
 }
 
-interface Node {
+interface CampNode {
   id: number;
   sceneId: string;
   name: string;
-  options: Option[];
+  options: NodeOption[];
 }
 
-interface Role {
+interface CampRole {
   id: number;
   name: string;
   control: string[];
@@ -31,9 +31,9 @@ interface Role {
 
 class CampScript {
   detail: string;
-  goals: Goal[];
-  nodes: Node[];
-  roles: Role[];
+  goals: CampGoal[];
+  nodes: CampNode[];
+  roles: CampRole[];
 }
 
 @Entity()
@@ -55,4 +55,4 @@ export class Project {
   blue: CampScript;
 }
 
-export { CampScript };
+export { GoalCondition, CampGoal, NodeOption, CampNode, CampRole, CampScript };
