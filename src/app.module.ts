@@ -16,7 +16,18 @@ import { PlayersModule } from './players/players.module';
     ConfigModule.forRoot({
       envFilePath: ['.local.env'],
     }),
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: ['dist/**/entities/*.entity{.ts,.js}'],
+      synchronize: true,
+      logging: true,
+      // timezone: '+0:00',
+    }),
     ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
@@ -26,16 +37,6 @@ import { PlayersModule } from './players/players.module';
     PlayersModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    // {
-    //   provide: APP_PIPE,
-    //   useClass: ValidationPipe,
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: SuccessInterceptor,
-    // },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
