@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 interface GoalCondition {
   target: string;
@@ -53,6 +54,15 @@ export class Project {
     type: 'json',
   })
   blue: CampScript;
+
+  @Exclude()
+  @CreateDateColumn({
+    type: 'timestamp',
+    nullable: false,
+    name: 'createTime',
+    comment: '创建时间',
+  })
+  createTime: Date;
 }
 
 export { GoalCondition, CampGoal, NodeOption, CampNode, CampRole, CampScript };
