@@ -12,7 +12,7 @@ export class SuccessInterceptor implements NestInterceptor {
       map((data: any) => {
         this.logger.debug(`${JSON.stringify(data)} +${Date.now() - now}ms`);
         return {
-          code: 0,
+          code: 1,
           message: 'Success',
           result: data,
         };
