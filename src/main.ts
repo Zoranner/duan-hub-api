@@ -1,5 +1,4 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './filters/all-exception.filter';
@@ -18,6 +17,6 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.useGlobalInterceptors(new SuccessInterceptor());
   app.enableCors({ origin: true });
-  await app.listen(3000);
+  await app.listen(9009);
 }
 bootstrap();
