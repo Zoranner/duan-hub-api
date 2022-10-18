@@ -1,34 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, UseGuards, Query, Logger } from '@nestjs/common';
 import { NodesService } from './nodes.service';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ValidateLimitPipe, ValidatePagePipe } from 'src/utils/pipe/list.pipe';
 
 @Controller('nodes')
 export class NodesController {
+  private readonly logger = new Logger(NodesController.name);
+
   constructor(private readonly nodesService: NodesService) {}
 
-  @Post()
+  @UseGuards(JwtAuthGuard)
+  @Post('create')
   create(@Body() createNodeDto: CreateNodeDto) {
     return this.nodesService.create(createNodeDto);
   }
 
-  @Get()
-  findAll() {
-    return this.nodesService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Get('list')
+  findAllWithPage(@Query('page', ValidatePagePipe) page: number, @Query('limit', ValidateLimitPipe) limit: number) {
+    return this.nodesService.findAllWithPage(page, limit);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.nodesService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get('detail')
+  findOne(@Query('name') name: string) {
+    return this.nodesService.findOne(name);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNodeDto: UpdateNodeDto) {
-    return this.nodesService.update(+id, updateNodeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.nodesService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @Patch('update')
+  update(@Query('name') name: string, @Body() updateNodeDto: UpdateNodeDto) {
+    return this.nodesService.update(name, updateNodeDto);
   }
 }
