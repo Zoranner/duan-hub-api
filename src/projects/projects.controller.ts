@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, Query, UseGuards } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ValidateLimitPipe, ValidatePagePipe } from 'src/utils/pipe/list.pipe';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -10,28 +11,34 @@ export class ProjectsController {
 
   constructor(private readonly projectsService: ProjectsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   create(@Body() createProjectDto: CreateProjectDto) {
+    this.logger.debug(JSON.stringify(createProjectDto));
     return this.projectsService.create(createProjectDto);
   }
 
-  @Get('list')
-  findAllWithPage(@Query('page', ValidatePagePipe) page: number, @Query('limit', ValidateLimitPipe) limit: number) {
-    return this.projectsService.findAllWithPage(page, limit);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Get('detail')
   findOne(@Query('id') id: number) {
     return this.projectsService.findOne(id);
   }
 
-  @Patch('update')
+  @UseGuards(JwtAuthGuard)
+  @Get('list')
+  findAllWithPage(@Query('page', ValidatePagePipe) page: number, @Query('limit', ValidateLimitPipe) limit: number) {
+    return this.projectsService.findAllWithPage(page, limit);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('detail')
   update(@Query('id') id: number, @Body() updateProjectDto: UpdateProjectDto) {
     return this.projectsService.update(id, updateProjectDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectsService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @Post('remove')
+  remove(@Query('id') id: number) {
+    return this.projectsService.remove(id);
   }
 }

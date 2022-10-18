@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { CampScript, Project } from './entities/project.entity';
+import { Project } from './entities/project.entity';
 
 @Injectable()
 export class ProjectsService {
@@ -22,7 +22,7 @@ export class ProjectsService {
     const pageList = await this.projectsRepository.find({
       select: {
         id: true,
-        name: true,
+        caption: true,
         createTime: true,
       },
       order: {
@@ -41,13 +41,15 @@ export class ProjectsService {
 
   async update(id: number, updateProjectDto: UpdateProjectDto) {
     const project = await this.findOne(id);
-    project.name = updateProjectDto.name;
+    project.caption = updateProjectDto.caption;
     project.red = updateProjectDto.red;
     project.blue = updateProjectDto.blue;
     return await this.projectsRepository.save(project);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async remove(id: number) {
+    const project = await this.findOne(id);
+    await this.projectsRepository.remove(project);
+    return undefined;
   }
 }

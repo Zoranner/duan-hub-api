@@ -18,9 +18,9 @@ interface NodeOption {
 }
 
 interface CampNode {
-  id: number;
+  name: number;
   sceneId: string;
-  name: string;
+  caption: string;
   options: NodeOption[];
 }
 
@@ -39,19 +39,29 @@ class CampScript {
 
 @Entity()
 export class Project {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    comment: '唯一标识',
+  })
   id: number;
 
-  @Column()
-  name: string;
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    comment: '标题',
+  })
+  caption: string;
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
+    nullable: false,
+    comment: '红方脚本',
   })
   red: CampScript;
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
+    nullable: false,
+    comment: '蓝方脚本',
   })
   blue: CampScript;
 
