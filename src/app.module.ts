@@ -10,6 +10,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { NodesModule } from './nodes/nodes.module';
 import { HistoriesModule } from './histories/histories.module';
 import { PlayersModule } from './players/players.module';
+import { HistoryUserRelModule } from './history_user_rel/history_user_rel.module';
 
 @Module({
   imports: [
@@ -25,8 +26,7 @@ import { PlayersModule } from './players/players.module';
       database: process.env.DB_NAME,
       entities: ['dist/**/entities/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: true,
-      // timezone: '+0:00',
+      logging: false,
     }),
     ScheduleModule.forRoot(),
     AuthModule,
@@ -35,6 +35,7 @@ import { PlayersModule } from './players/players.module';
     NodesModule,
     HistoriesModule,
     PlayersModule,
+    HistoryUserRelModule,
   ],
   controllers: [AppController],
   providers: [AppService],
