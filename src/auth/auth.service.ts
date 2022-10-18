@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ServerConfig } from 'src/configs/server.config';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
@@ -17,7 +17,7 @@ export class AuthService {
     if (user && user.password === password) {
       return user;
     }
-    return null;
+    throw new NotFoundException('用户名或密码错误');
   }
 
   async login(user: LoginUserDto) {
@@ -28,5 +28,9 @@ export class AuthService {
       token: this.jwtService.sign(payload),
       expiresIn: ServerConfig.expiresIn,
     };
+  }
+
+  async logout(_username: string) {
+    return undefined;
   }
 }

@@ -9,7 +9,6 @@ export enum UserGender {
 export enum UserRole {
   Normal = 1,
   Admin = 2,
-  SuperAdmin = 3,
 }
 
 @Entity()
