@@ -26,7 +26,7 @@ import { HistoryUserRelModule } from './history_user_rel/history_user_rel.module
       database: process.env.DB_NAME,
       entities: ['dist/**/entities/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: false,
+      logging: true,
     }),
     ScheduleModule.forRoot(),
     AuthModule,

@@ -8,12 +8,14 @@ export class SuccessInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const now = Date.now();
+    const ctx = context.switchToHttp();
+    const requestUrl = ctx.getRequest().url;
     return next.handle().pipe(
       map((data: any) => {
-        this.logger.debug(`${JSON.stringify(data)} +${Date.now() - now}ms`);
+        this.logger.log(`[${requestUrl}] ${JSON.stringify(data)} +${Date.now() - now}ms`);
         return {
           code: 1,
-          message: 'Success',
+          message: '请求成功',
           result: data,
         };
       }),

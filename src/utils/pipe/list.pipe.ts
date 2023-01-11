@@ -12,8 +12,8 @@ export class ValidatePagePipe implements PipeTransform {
 @Injectable()
 export class ValidateLimitPipe implements PipeTransform {
   transform(value: number, _metadata: ArgumentMetadata) {
-    value = Number.isInteger(value) ? value : 10;
-    return Math.clamp(value, 10, 50);
+    value = Number.isInteger(value) ? value : 5;
+    return Math.clamp(value, 5, 30);
   }
 }
 

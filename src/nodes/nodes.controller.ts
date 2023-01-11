@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, UseGuards, Query, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Query, Logger } from '@nestjs/common';
 import { NodesService } from './nodes.service';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
@@ -30,8 +30,14 @@ export class NodesController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch('update')
+  @Post('detail')
   update(@Query('name') name: string, @Body() updateNodeDto: UpdateNodeDto) {
     return this.nodesService.update(name, updateNodeDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('remove')
+  remove(@Query('name') name: string) {
+    return this.nodesService.remove(name);
   }
 }

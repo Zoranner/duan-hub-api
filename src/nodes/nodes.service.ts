@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger, NotFoundException, PreconditionFailedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateNodeDto } from './dto/update-node.dto';
@@ -13,14 +13,27 @@ export class NodesService {
     private readonly nodesRepository: Repository<Node>,
   ) {}
 
-  create(updateNodeDto: UpdateNodeDto) {
-    return this.nodesRepository.save(updateNodeDto);
+  async findOne(name: string): Promise<Node> {
+    if (!name) {
+      throw new PreconditionFailedException('输入的参数有误');
+    }
+    return await this.nodesRepository.findOneBy({ name });
+  }
+
+  async create(updateNodeDto: UpdateNodeDto) {
+    const node = await this.findOne(updateNodeDto.name);
+    if (node) {
+      throw new ConflictException('该名称对应的节点已存在');
+    }
+    return await this.nodesRepository.save(updateNodeDto);
   }
 
   async findAllWithPage(page: number, limit: number) {
     const pageList = await this.nodesRepository.find({
       select: {
         name: true,
+        caption: true,
+        type: true,
         createTime: true,
       },
       order: {
@@ -30,20 +43,23 @@ export class NodesService {
       take: limit,
     });
 
-    return { data: pageList, page: page, limit: limit };
-  }
-
-  async findOne(name: string): Promise<Node> {
-    return await this.nodesRepository.findOneBy({ name });
+    return { data: pageList, page: page, limit: limit, count: 0 };
   }
 
   async update(name: string, updateNodeDto: UpdateNodeDto) {
-    const project = await this.findOne(name);
-    project.name = updateNodeDto.name;
-    return await this.nodesRepository.save(project);
+    const node = await this.findOne(name);
+    node.caption = updateNodeDto.caption;
+    node.type = updateNodeDto.type;
+    node.options = updateNodeDto.options;
+    return await this.nodesRepository.save(node);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async remove(name: string) {
+    const node = await this.findOne(name);
+    if (!node) {
+      throw new NotFoundException('没有找到要删除的用仿真工程');
+    }
+    await this.nodesRepository.remove(node);
+    return undefined;
   }
 }

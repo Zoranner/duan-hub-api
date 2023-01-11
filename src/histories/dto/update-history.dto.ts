@@ -1,4 +1,10 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateHistoryDto } from './create-history.dto';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { HistoryState } from '../entities/history.entity';
 
-export class UpdateHistoryDto extends PartialType(CreateHistoryDto) {}
+export class UpdateHistoryDto {
+  @IsNotEmpty({ message: '标题为空' })
+  caption: string;
+
+  @IsEnum(HistoryState)
+  state: HistoryState;
+}

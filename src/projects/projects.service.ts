@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, PreconditionFailedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -14,8 +14,15 @@ export class ProjectsService {
     private readonly projectsRepository: Repository<Project>,
   ) {}
 
-  create(createProjectDto: CreateProjectDto) {
-    return this.projectsRepository.save(createProjectDto);
+  async findOne(id: number) {
+    if (!id) {
+      throw new PreconditionFailedException('输入的参数有误');
+    }
+    return await this.projectsRepository.findOneBy({ id });
+  }
+
+  async create(createProjectDto: CreateProjectDto) {
+    return await this.projectsRepository.save(createProjectDto);
   }
 
   async findAllWithPage(page: number, limit: number) {
@@ -23,6 +30,10 @@ export class ProjectsService {
       select: {
         id: true,
         caption: true,
+        describe: true,
+        goals: {},
+        startTime: true,
+        finishTime: true,
         createTime: true,
       },
       order: {
@@ -32,23 +43,24 @@ export class ProjectsService {
       take: limit,
     });
 
-    return { data: pageList, page: page, limit: limit };
-  }
-
-  async findOne(id: number) {
-    return await this.projectsRepository.findOneBy({ id });
+    return { data: pageList, page: page, limit: limit, count: 0 };
   }
 
   async update(id: number, updateProjectDto: UpdateProjectDto) {
     const project = await this.findOne(id);
     project.caption = updateProjectDto.caption;
-    project.red = updateProjectDto.red;
-    project.blue = updateProjectDto.blue;
+    project.describe = updateProjectDto.describe;
+    project.goals = updateProjectDto.goals;
+    project.nodes = updateProjectDto.nodes;
+    project.roles = updateProjectDto.roles;
     return await this.projectsRepository.save(project);
   }
 
   async remove(id: number) {
     const project = await this.findOne(id);
+    if (!project) {
+      throw new NotFoundException('没有找到要删除的用仿真工程');
+    }
     await this.projectsRepository.remove(project);
     return undefined;
   }

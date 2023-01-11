@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Logger, Query, UseGuards } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -14,20 +14,19 @@ export class ProjectsController {
   @UseGuards(JwtAuthGuard)
   @Post('create')
   create(@Body() createProjectDto: CreateProjectDto) {
-    this.logger.debug(JSON.stringify(createProjectDto));
     return this.projectsService.create(createProjectDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('detail')
-  findOne(@Query('id') id: number) {
-    return this.projectsService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('list')
   findAllWithPage(@Query('page', ValidatePagePipe) page: number, @Query('limit', ValidateLimitPipe) limit: number) {
     return this.projectsService.findAllWithPage(page, limit);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('detail')
+  findOne(@Query('id') id: number) {
+    return this.projectsService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)

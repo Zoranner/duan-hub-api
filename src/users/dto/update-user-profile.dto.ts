@@ -1,4 +1,4 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsString } from 'class-validator';
 import { UserGender } from '../entities/user.entity';
 
 export class UpdateUserProfileDto {
@@ -7,4 +7,7 @@ export class UpdateUserProfileDto {
 
   @IsEnum(UserGender)
   gender: UserGender;
+
+  @IsBoolean()
+  isActive: boolean;
 }

@@ -30,6 +30,12 @@ export class UsersController {
     return this.usersService.create(request.user.username, createUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('list')
+  findAllWithPage(@Query('page', ValidatePagePipe) page: number, @Query('limit', ValidateLimitPipe) limit: number) {
+    return this.usersService.findAllWithPage(page, limit);
+  }
+
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   @Get('profile')
@@ -60,12 +66,6 @@ export class UsersController {
   @Post('password')
   updatePassword(@Req() request: any, @Body() updateUserPasswordDto: UpdateUserPasswordDto) {
     return this.usersService.updatePassword(request.user.username, updateUserPasswordDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('list')
-  findAllWithPage(@Query('page', ValidatePagePipe) page: number, @Query('limit', ValidateLimitPipe) limit: number) {
-    return this.usersService.findAllWithPage(page, limit);
   }
 
   @Post('remove')

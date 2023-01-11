@@ -1,11 +1,18 @@
-import { ForbiddenException, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  PreconditionFailedException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
-import { User, UserRole } from './entities/user.entity';
+import { User, RightRole } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +24,9 @@ export class UsersService {
   ) {}
 
   async findOne(username: string): Promise<User> {
+    if (!username) {
+      throw new PreconditionFailedException('输入的参数有误');
+    }
     return await this.usersRepository.findOne({
       where: {
         username: username,
@@ -27,10 +37,35 @@ export class UsersService {
 
   async create(username: string, createUserDto: CreateUserDto): Promise<User> {
     const user = await this.findOne(username);
-    if (user.adminRole != UserRole.Admin) {
-      throw new ForbiddenException('没有权限进行创建用户');
+    if (user.rightRole != RightRole.Admin) {
+      throw new ForbiddenException('没有权限创建用户');
     }
-    return this.usersRepository.save(createUserDto);
+    const addUser = await this.findOne(createUserDto.username);
+    if (addUser) {
+      throw new ConflictException('用户名已存在');
+    }
+    return await this.usersRepository.save(createUserDto);
+  }
+
+  async findAllWithPage(page: number, limit: number) {
+    const pageList = await this.usersRepository.find({
+      where: {
+        rightRole: RightRole.Normal,
+      },
+      select: {
+        username: true,
+        realname: true,
+        gender: true,
+        createTime: true,
+      },
+      order: {
+        createTime: 'DESC',
+      },
+      skip: limit * (page - 1),
+      take: limit,
+    });
+
+    return { data: pageList, page: page, limit: limit };
   }
 
   async findProfile(username: string): Promise<User> {
@@ -59,7 +94,7 @@ export class UsersService {
     }
     let updateUser = null;
     if (updateUsername != username) {
-      if (user.adminRole != UserRole.Admin) {
+      if (user.rightRole != RightRole.Admin) {
         throw new ForbiddenException('没有权限进行修改');
       }
       updateUser = await this.findOne(updateUsername);
@@ -85,25 +120,11 @@ export class UsersService {
     return user;
   }
 
-  async findAllWithPage(page: number, limit: number) {
-    const pageList = await this.usersRepository.find({
-      select: {
-        username: true,
-        realname: true,
-        signDate: true,
-      },
-      order: {
-        signDate: 'DESC',
-      },
-      skip: limit * (page - 1),
-      take: limit,
-    });
-
-    return { data: pageList, page: page, limit: limit };
-  }
-
   async remove(username: string) {
     const user = await this.findOne(username);
+    if (!user) {
+      throw new NotFoundException('没有找到要修改的用户名');
+    }
     await this.usersRepository.remove(user);
     return undefined;
   }
