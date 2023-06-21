@@ -1,17 +1,20 @@
 module.exports = {
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
   root: true,
   env: {
     node: true,
     jest: true,
   },
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.json',
-    ecmaVersion: 2020,
-    sourceType: 'module',
-  },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'prettier', 'plugin:prettier/recommended'],
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     // eslint (http://eslint.cn/docs/rules)

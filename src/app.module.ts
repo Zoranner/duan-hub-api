@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module';
-import { NodesModule } from './nodes/nodes.module';
 import { HistoriesModule } from './histories/histories.module';
-import { PlayersModule } from './players/players.module';
 import { HistoryUserRelModule } from './history_user_rel/history_user_rel.module';
+import { NodesModule } from './nodes/nodes.module';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [

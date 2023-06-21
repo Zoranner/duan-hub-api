@@ -22,7 +22,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       message: exception.message,
     };
 
-    this.logger.error(`[${requestUrl}] ${JSON.stringify(exception)} +${Date.now() - now}ms`);
+    this.logger.error(`[${requestUrl}] ${exception.stack} +${Date.now() - now}ms`);
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
     //throw exception;
   }
