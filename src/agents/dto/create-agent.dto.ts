@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
-import { NodeOption, NodeType } from '../entities/node.entity';
+import { AgentOption, AgentType } from '../entities/agent.entity';
 
-export class CreateNodeDto {
+export class CreateAgentDto {
   @IsNotEmpty({ message: '标识符为空' })
   name: string;
 
@@ -9,8 +9,8 @@ export class CreateNodeDto {
   caption: string;
 
   @IsNotEmpty({ message: '类型为空' })
-  type: NodeType;
+  type: AgentType;
 
   @IsNotEmpty({ message: '配置项为空' })
-  options: NodeOption[];
+  options: AgentOption[];
 }

@@ -37,7 +37,7 @@ export class HistoriesService {
             red: true,
             blue: true,
           },
-          nodes: {
+          agents: {
             red: true,
             blue: true,
           },
@@ -124,7 +124,7 @@ export class HistoriesService {
             red: true,
             blue: true,
           },
-          nodes: {
+          agents: {
             red: true,
             blue: true,
           },

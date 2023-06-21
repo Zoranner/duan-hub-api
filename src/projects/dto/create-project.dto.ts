@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { CampGoal, CampNode, CampRole } from '../entities/project.entity';
+import { CampGoal, CampAgent, CampRole } from '../entities/project.entity';
 
 export class CreateProjectDto {
   @IsNotEmpty({ message: '方案标题为空' })
@@ -11,8 +11,8 @@ export class CreateProjectDto {
   @IsNotEmpty({ message: '方案目标为空' })
   goals: CampGoal;
 
-  @IsNotEmpty({ message: '方案节点为空' })
-  nodes: CampNode;
+  @IsNotEmpty({ message: '方案智能体为空' })
+  agents: CampAgent;
 
   @IsNotEmpty({ message: '方案角色为空' })
   roles: CampRole;

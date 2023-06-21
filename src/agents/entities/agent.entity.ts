@@ -10,7 +10,7 @@ export enum OptionType {
   Boolean = 5,
 }
 
-export enum NodeType {
+export enum AgentType {
   None = 0, //无
   System = 1, //系统
   Group = 2, //群组
@@ -44,7 +44,7 @@ interface BooleanOption {
   current: boolean;
 }
 
-interface NodeOption {
+interface AgentOption {
   name: string;
   caption: string;
   category: string;
@@ -53,7 +53,7 @@ interface NodeOption {
 }
 
 @Entity()
-export class Node {
+export class Agent {
   @PrimaryColumn({
     type: 'varchar',
     nullable: false,
@@ -71,12 +71,12 @@ export class Node {
 
   @Column({
     type: 'enum',
-    enum: NodeType,
+    enum: AgentType,
     nullable: false,
-    default: NodeType.None,
+    default: AgentType.None,
     comment: '类型',
   })
-  type: NodeType;
+  type: AgentType;
 
   @Column({
     type: 'jsonb',
@@ -84,7 +84,7 @@ export class Node {
     default: [],
     comment: '配置项',
   })
-  options: NodeOption[];
+  options: AgentOption[];
 
   @Exclude()
   @CreateDateColumn({
@@ -96,4 +96,4 @@ export class Node {
   createTime: Date;
 }
 
-export { NodeOption };
+export { AgentOption };

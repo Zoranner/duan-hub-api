@@ -17,7 +17,7 @@ interface GoalSource {
   detail: string;
 }
 
-interface NodeSource {
+interface AgentSource {
   name: number;
   sceneId: string;
   caption: string;
@@ -35,9 +35,9 @@ class CampGoal {
   blue: GoalSource[];
 }
 
-class CampNode {
-  red: NodeSource[];
-  blue: NodeSource[];
+class CampAgent {
+  red: AgentSource[];
+  blue: AgentSource[];
 }
 
 class CampRole {
@@ -79,9 +79,9 @@ export class Project {
     type: 'jsonb',
     nullable: false,
     default: { red: null, blue: null },
-    comment: '节点',
+    comment: '智能体',
   })
-  nodes: CampNode;
+  agents: CampAgent;
 
   @Column({
     type: 'jsonb',
@@ -119,4 +119,4 @@ export class Project {
   createTime: Date;
 }
 
-export { CampGoal, CampNode, CampRole };
+export { CampGoal, CampAgent, CampRole };

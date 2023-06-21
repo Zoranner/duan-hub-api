@@ -51,7 +51,7 @@ export class ProjectsService {
     project.caption = updateProjectDto.caption;
     project.describe = updateProjectDto.describe;
     project.goals = updateProjectDto.goals;
-    project.nodes = updateProjectDto.nodes;
+    project.agents = updateProjectDto.agents;
     project.roles = updateProjectDto.roles;
     return await this.projectsRepository.save(project);
   }
