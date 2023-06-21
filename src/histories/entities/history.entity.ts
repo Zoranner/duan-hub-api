@@ -24,7 +24,7 @@ export class History {
   })
   caption: string;
 
-  @ManyToOne(() => Project, (project) => project.histories, {
+  @ManyToOne(() => Project, project => project.histories, {
     nullable: false,
     onDelete: 'CASCADE',
   })

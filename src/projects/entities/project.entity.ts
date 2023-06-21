@@ -91,7 +91,7 @@ export class Project {
   })
   roles: CampRole;
 
-  @OneToMany(() => History, (history) => history.project)
+  @OneToMany(() => History, history => history.project)
   histories: History[];
 
   @CreateDateColumn({

@@ -28,7 +28,7 @@ module.exports = {
   // 默认值。因为使用了一些折行敏感型的渲染器（如GitHub comment）而按照markdown文本样式进行折行
   proseWrap: 'preserve',
   // 换行符使用 lf 结尾是 可选值"<auto|lf|crlf|cr>"
-  endOfLine: 'auto',
+  endOfLine: 'lf',
   // 这两个选项可用于格式化以给定字符偏移量（分别包括和不包括）开始和结束的代码
   rangeStart: 0,
   rangeEnd: Infinity,

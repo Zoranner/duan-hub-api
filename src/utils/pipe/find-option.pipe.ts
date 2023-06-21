@@ -20,7 +20,7 @@ export class ValidateWherePipe<Entity> implements PipeTransform {
     let result: FindOptionsWhere<Entity> = {};
     let whereObject = JSON.parse(value);
     if (whereObject) {
-      Object.keys(whereObject).forEach((field) => {
+      Object.keys(whereObject).forEach(field => {
         let condition = whereObject[field];
         if (condition.value !== null || undefined) {
           switch (condition.type) {
@@ -67,7 +67,7 @@ export class ValidateOrderPipe<Entity> implements PipeTransform {
     let result: FindOptionsOrder<Entity> = {};
     let orderObject = JSON.parse(value);
     if (orderObject) {
-      Object.keys(orderObject).forEach((field) => {
+      Object.keys(orderObject).forEach(field => {
         let orderType = orderObject[field];
         switch (orderType) {
           case OrderType.Asc:
