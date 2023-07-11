@@ -44,6 +44,11 @@ interface NumberRangeValue {
   current: number[];
 }
 
+interface DisplaySetting {
+  unit: string;
+  factor: number;
+}
+
 interface AgentOptionGroup {
   name: string;
   caption: string;
@@ -54,6 +59,7 @@ interface AgentOptionItem {
   caption: string;
   type: OptionType;
   group: string;
+  display: DisplaySetting;
   value: StringValue | NumberValue | EnumValue | BooleanValue | NumberRangeValue;
 }
 
