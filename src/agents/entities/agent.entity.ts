@@ -54,7 +54,6 @@ interface AgentOptionItem {
   caption: string;
   type: OptionType;
   group: string;
-  condition: string;
   value: StringValue | NumberValue | EnumValue | BooleanValue | NumberRangeValue;
 }
 
