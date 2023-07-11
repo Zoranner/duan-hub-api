@@ -26,7 +26,7 @@ export class AgentsController {
   @UseGuards(JwtAuthGuard)
   @Get('detail')
   findOne(@Query('name') name: string) {
-    return this.agentsService.findOne(name);
+    return this.agentsService.findOneWithChilden(name);
   }
 
   @UseGuards(JwtAuthGuard)

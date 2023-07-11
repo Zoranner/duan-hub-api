@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { AgentRel } from 'src/agents/entities/agent-rel.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 export enum OptionType {
   Object = 0,
@@ -8,48 +9,52 @@ export enum OptionType {
   Double = 3,
   Enum = 4,
   Boolean = 5,
+  IntRange = 6,
+  DoubleRange = 7,
 }
 
-export enum AgentType {
-  None = 0, //无
-  System = 1, //系统
-  Group = 2, //群组
-  Entity = 3, //实体
-  Equipment = 4, //装备
-  Sensor = 5, //感知
-}
-
-interface StringOption {
+interface StringValue {
   current: string;
 }
 
-interface IntOption {
+interface NumberValue {
   min: number;
   max: number;
   current: number;
 }
 
-interface DoubleOption {
-  min: number;
-  max: number;
-  current: number;
-}
-
-interface EnumOption {
+interface EnumValue {
   items: { key: number; caption: string };
   current: number;
 }
 
-interface BooleanOption {
+interface BooleanValue {
   current: boolean;
 }
 
-interface AgentOption {
+interface NumberRangeValue {
+  min: number;
+  max: number;
+  current: number[];
+}
+
+interface AgentOptionGroup {
   name: string;
   caption: string;
-  category: string;
+}
+
+interface AgentOptionItem {
+  name: string;
+  caption: string;
   type: OptionType;
-  value: StringOption | IntOption | DoubleOption | EnumOption | BooleanOption;
+  group: string;
+  condition: string;
+  value: StringValue | NumberValue | EnumValue | BooleanValue | NumberRangeValue;
+}
+
+interface AgentOption {
+  groups: AgentOptionGroup[];
+  items: AgentOptionItem[];
 }
 
 @Entity()
@@ -70,21 +75,18 @@ export class Agent {
   caption: string;
 
   @Column({
-    type: 'enum',
-    enum: AgentType,
-    nullable: false,
-    default: AgentType.None,
-    comment: '类型',
-  })
-  type: AgentType;
-
-  @Column({
     type: 'jsonb',
     nullable: false,
     default: [],
     comment: '配置项',
   })
   options: AgentOption[];
+
+  @OneToMany(() => AgentRel, agentRel => agentRel.child)
+  parentRels: AgentRel[];
+
+  @OneToMany(() => AgentRel, agentRel => agentRel.parent)
+  childRels: AgentRel[];
 
   @Exclude()
   @CreateDateColumn({

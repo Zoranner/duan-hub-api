@@ -15,9 +15,41 @@ export class AgentsService {
 
   async findOne(name: string): Promise<Agent> {
     if (!name) {
-      throw new PreconditionFailedException('输入的参数有误');
+      throw new Error('输入的参数有误');
     }
-    return await this.agentsRepository.findOneBy({ name });
+    return await this.agentsRepository.findOneBy({ name: name });
+  }
+
+  async findOneWithChilden(name: string): Promise<any> {
+    if (!name) {
+      throw new Error('输入的参数有误');
+    }
+    const agent = await this.agentsRepository.findOne({
+      where: { name: name },
+      relations: ['childRels.child'],
+    });
+    if (agent) {
+      await this.loadChildren(agent);
+    }
+    return agent;
+  }
+
+  async loadChildren(agent: any): Promise<void> {
+    const children = agent.childRels.map((childRel: any) => childRel.child);
+    agent.children = children;
+    delete agent.childRels;
+    if (children && children.length > 0) {
+      const promises = children.map(async (child: any) => {
+        const childAgent: any = await this.agentsRepository.findOne({
+          select: { childRels: true },
+          where: { name: child.name },
+          relations: ['childRels.child'],
+        });
+        child.childRels = childAgent.childRels;
+        this.loadChildren(child);
+      });
+      await Promise.all(promises);
+    }
   }
 
   async create(updateAgentDto: UpdateAgentDto) {
@@ -33,7 +65,6 @@ export class AgentsService {
       select: {
         name: true,
         caption: true,
-        type: true,
         createTime: true,
       },
       order: {
@@ -42,14 +73,12 @@ export class AgentsService {
       skip: limit * (page - 1),
       take: limit,
     });
-
     return { data: pageList, page: page, limit: limit, count: 0 };
   }
 
   async update(name: string, updateAgentDto: UpdateAgentDto) {
     const agent = await this.findOne(name);
     agent.caption = updateAgentDto.caption;
-    agent.type = updateAgentDto.type;
     agent.options = updateAgentDto.options;
     return await this.agentsRepository.save(agent);
   }
