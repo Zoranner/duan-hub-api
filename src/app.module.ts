@@ -8,7 +8,6 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module';
 import { HistoriesModule } from './histories/histories.module';
-import { HistoryUserRelModule } from './history_user_rel/history_user_rel.module';
 import { PlayersModule } from './players/players.module';
 import { AgentsModule } from './agents/agents.module';
 
@@ -34,7 +33,6 @@ import { AgentsModule } from './agents/agents.module';
     ProjectsModule,
     HistoriesModule,
     PlayersModule,
-    HistoryUserRelModule,
     AgentsModule,
   ],
   controllers: [AppController],
