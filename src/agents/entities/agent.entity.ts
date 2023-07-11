@@ -23,8 +23,14 @@ interface NumberValue {
   current: number;
 }
 
+interface EnumValueItem {
+  key: number;
+  caption: string;
+  options: { [key: string]: AgentOptionItem };
+}
+
 interface EnumValue {
-  items: { key: number; caption: string };
+  items: { [key: number]: EnumValueItem };
   current: number;
 }
 
@@ -53,8 +59,8 @@ interface AgentOptionItem {
 }
 
 interface AgentOption {
-  groups: AgentOptionGroup[];
-  items: AgentOptionItem[];
+  groups: { [key: string]: AgentOptionGroup };
+  items: { [key: string]: AgentOptionItem };
 }
 
 @Entity()
@@ -80,7 +86,7 @@ export class Agent {
     default: [],
     comment: '配置项',
   })
-  options: AgentOption[];
+  options: AgentOption;
 
   @OneToMany(() => AgentRel, agentRel => agentRel.child)
   parentRels: AgentRel[];

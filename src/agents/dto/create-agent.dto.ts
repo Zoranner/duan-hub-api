@@ -9,5 +9,5 @@ export class CreateAgentDto {
   caption: string;
 
   @IsNotEmpty({ message: '配置项为空' })
-  options: AgentOption[];
+  options: AgentOption;
 }
