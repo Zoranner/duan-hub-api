@@ -17,6 +17,6 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.useGlobalInterceptors(new SuccessInterceptor());
   app.enableCors({ origin: true });
-  await app.listen(9009);
+  await app.listen(process.env.APP_PORT || 9000);
 }
 bootstrap();
