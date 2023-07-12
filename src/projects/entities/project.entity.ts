@@ -91,6 +91,14 @@ export class Project {
   })
   roles: CampRole;
 
+  @Column({
+    type: 'jsonb',
+    nullable: false,
+    default: {},
+    comment: '环境变量',
+  })
+  environments: object;
+
   @OneToMany(() => History, history => history.project)
   histories: History[];
 
