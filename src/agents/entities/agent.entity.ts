@@ -5,19 +5,29 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn } from 'type
 export enum OptionType {
   Object = 0,
   String = 1,
-  Int = 2,
+  Integer = 2,
   Double = 3,
   Enum = 4,
   Boolean = 5,
   IntRange = 6,
   DoubleRange = 7,
+  FrequencyBand = 8,
 }
 
-interface StringValue {
+interface DisplaySetting {
+  unit: string;
+  factor: number;
+}
+
+interface BaseOption {
+  display: DisplaySetting;
+}
+
+interface StringValue extends BaseOption {
   current: string;
 }
 
-interface NumberValue {
+interface NumberValue extends BaseOption {
   min: number;
   max: number;
   current: number;
@@ -29,24 +39,35 @@ interface EnumValueItem {
   options: { [key: string]: AgentOptionItem };
 }
 
-interface EnumValue {
+interface EnumValue extends BaseOption {
   items: { [key: number]: EnumValueItem };
   current: number;
 }
 
-interface BooleanValue {
+interface BooleanValue extends BaseOption {
   current: boolean;
 }
 
-interface NumberRangeValue {
+interface NumberRangeCurrent {
   min: number;
   max: number;
-  current: number[];
 }
 
-interface DisplaySetting {
-  unit: string;
-  factor: number;
+interface NumberRangeValue extends BaseOption {
+  min: number;
+  max: number;
+  current: NumberRangeCurrent;
+}
+
+interface FrequencyBandCurrent {
+  uplink: NumberRangeCurrent;
+  downlink: NumberRangeCurrent;
+}
+
+interface FrequencyBandValue extends BaseOption {
+  min: number;
+  max: number;
+  current: FrequencyBandCurrent;
 }
 
 interface AgentOptionGroup {
@@ -59,8 +80,7 @@ interface AgentOptionItem {
   caption: string;
   type: OptionType;
   group: string;
-  display: DisplaySetting;
-  value: StringValue | NumberValue | EnumValue | BooleanValue | NumberRangeValue;
+  value: StringValue | NumberValue | EnumValue | BooleanValue | NumberRangeValue | FrequencyBandValue;
 }
 
 interface AgentOption {
@@ -86,9 +106,9 @@ export class Agent {
   caption: string;
 
   @Column({
-    type: 'jsonb',
+    type: 'json',
     nullable: false,
-    default: [],
+    default: {},
     comment: '配置项',
   })
   options: AgentOption;
