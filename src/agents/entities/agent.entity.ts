@@ -2,6 +2,15 @@ import { Exclude } from 'class-transformer';
 import { AgentRel } from 'src/agents/entities/agent-rel.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
+export enum AgentType {
+  None = 0,
+  System = 1, //系统
+  Group = 2, //群组
+  Entity = 3, //实体
+  Equipment = 4, //装备
+  Sensor = 5, //感知
+}
+
 export enum OptionType {
   Object = 0,
   String = 1,
@@ -9,7 +18,7 @@ export enum OptionType {
   Double = 3,
   Enum = 4,
   Boolean = 5,
-  IntRange = 6,
+  IntegerRange = 6,
   DoubleRange = 7,
   FrequencyBand = 8,
 }
@@ -104,6 +113,15 @@ export class Agent {
     comment: '标题',
   })
   caption: string;
+
+  @Column({
+    type: 'enum',
+    enum: AgentType,
+    nullable: false,
+    default: AgentType.None,
+    comment: '类型',
+  })
+  type: AgentType;
 
   @Column({
     type: 'json',

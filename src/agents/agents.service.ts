@@ -67,6 +67,9 @@ export class AgentsService {
         caption: true,
         createTime: true,
       },
+      where: {
+        type: AgentType.Entity,
+      },
       order: {
         createTime: 'DESC',
       },
