@@ -2,7 +2,7 @@ import { ConflictException, Injectable, Logger, NotFoundException, PreconditionF
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateAgentDto } from './dto/update-agent.dto';
-import { Agent } from './entities/agent.entity';
+import { Agent, AgentType } from './entities/agent.entity';
 
 @Injectable()
 export class AgentsService {
