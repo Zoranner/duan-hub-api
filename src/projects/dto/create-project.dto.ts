@@ -17,6 +17,9 @@ export class CreateProjectDto {
   @IsNotEmpty({ message: '方案角色为空' })
   roles: CampRole;
 
+  @IsNotEmpty({ message: '环境变量为空' })
+  environments: object;
+
   // @IsNotEmpty({ message: '红方脚本为空' })
   // red: CampScript;
 
